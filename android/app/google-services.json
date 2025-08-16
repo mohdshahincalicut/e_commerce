@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "448926488667",
+    "firebase_url": "https://graphite-flare-418314-default-rtdb.firebaseio.com",
+    "project_id": "graphite-flare-418314",
+    "storage_bucket": "graphite-flare-418314.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448926488667:android:68ce620fc764be6388c77e",
+        "android_client_info": {
+          "package_name": "com.yourdomain.e_commerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448926488667-0v9u0srsvq28brr25t80qgh1i8bsu146.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSJDqalTHk1hSes276Z_ez6niabvA5Wgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448926488667-0v9u0srsvq28brr25t80qgh1i8bsu146.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "448926488667-kj0uqq5j6tctoajgcc5hifcrre99hbma.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yourdomain.eCommerce"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
