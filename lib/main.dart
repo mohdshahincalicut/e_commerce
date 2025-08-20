@@ -13,6 +13,7 @@ import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/wishlist_screen.dart';
 import 'screens/cart_screen.dart';
+import 'screens/network_error_screen.dart';
 import 'utils/database_init.dart';
 
 void main() async {
@@ -92,6 +93,7 @@ class MyApp extends StatelessWidget {
               '/profile': (context) => const ProfileScreen(),
               '/wishlist': (context) => const WishlistScreen(),
               '/cart': (context) => const CartScreen(),
+              '/network-error': (context) => const NetworkErrorScreen(),
             },
           );
         },

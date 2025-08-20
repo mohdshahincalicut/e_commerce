@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import '../providers/database_provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/auth_provider.dart';
+import '../services/network_service.dart';
+import '../screens/network_error_screen.dart';
 import 'product_detail_screen.dart';
 
 class SearchResultsScreen extends StatefulWidget {
@@ -38,31 +40,77 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     super.dispose();
   }
 
-  void _performSearch() {
+  Future<void> _performSearch() async {
     setState(() {
       _isLoading = true;
     });
 
-    final databaseProvider = context.read<DatabaseProvider>();
-    final query = widget.searchQuery.toLowerCase();
+    // Check network connectivity
+    final networkService = NetworkService();
+    final hasConnection = await networkService.hasInternetConnection();
     
-    final results = databaseProvider.products.where((product) {
-      final name = product['name']?.toString().toLowerCase() ?? '';
-      final description = product['description']?.toString().toLowerCase() ?? '';
-      final categoryId = product['categoryId']?.toString().toLowerCase() ?? '';
+    if (!hasConnection) {
+      setState(() {
+        _isLoading = false;
+      });
       
-      return name.contains(query) || 
-             description.contains(query) || 
-             categoryId.contains(query);
-    }).toList();
+      // Navigate to network error screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NetworkErrorScreen(
+            errorMessage: 'Unable to load search results. Please check your internet connection.',
+            onRetry: () {
+              Navigator.pop(context);
+              _performSearch();
+            },
+          ),
+        ),
+      );
+      return;
+    }
 
-    // Sort results
-    _sortResults(results);
+    try {
+      final databaseProvider = context.read<DatabaseProvider>();
+      final query = widget.searchQuery.toLowerCase();
+      
+      final results = databaseProvider.products.where((product) {
+        final name = product['name']?.toString().toLowerCase() ?? '';
+        final description = product['description']?.toString().toLowerCase() ?? '';
+        final categoryId = product['categoryId']?.toString().toLowerCase() ?? '';
+        
+        return name.contains(query) || 
+               description.contains(query) || 
+               categoryId.contains(query);
+      }).toList();
 
-    setState(() {
-      _searchResults = results;
-      _isLoading = false;
-    });
+      // Sort results
+      _sortResults(results);
+
+      setState(() {
+        _searchResults = results;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      
+      // Show error dialog
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Search Error'),
+          content: Text('An error occurred while searching: $e'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _sortResults(List<Map<String, dynamic>> results) {

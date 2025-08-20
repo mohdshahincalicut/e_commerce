@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../providers/database_provider.dart';
 import '../../screens/search_results_screen.dart';
+import '../../screens/network_error_screen.dart';
+import '../../services/network_service.dart';
 
 class SearchBarWidget extends StatefulWidget {
   const SearchBarWidget({super.key});
@@ -96,10 +98,31 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     });
   }
 
-  void _performSearch(String query) {
+  Future<void> _performSearch(String query) async {
     if (query.trim().isEmpty) return;
     
     _focusNode.unfocus();
+    
+    // Check network connectivity before performing search
+    final networkService = NetworkService();
+    final hasConnection = await networkService.hasInternetConnection();
+    
+    if (!hasConnection) {
+      // Navigate to network error screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NetworkErrorScreen(
+            errorMessage: 'Unable to search products. Please check your internet connection.',
+            onRetry: () {
+              Navigator.pop(context);
+              _performSearch(query);
+            },
+          ),
+        ),
+      );
+      return;
+    }
     
     // Navigate to search results screen
     Navigator.push(

@@ -45,6 +45,7 @@ dependencies:
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.3
   permission_handler: ^11.1.0
+  connectivity_plus: ^5.0.2
   # Removed localization dependencies
   # flutter_localizations:
   #   sdk: flutter

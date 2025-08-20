@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/sample_data.dart';
+import '../services/network_service.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _products = [];
@@ -77,6 +78,17 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // Check network connectivity first
+      final networkService = NetworkService();
+      final hasConnection = await networkService.hasInternetConnection();
+      
+      if (!hasConnection) {
+        _productsError = 'No internet connection. Please check your network settings.';
+        _isLoadingProducts = false;
+        notifyListeners();
+        return;
+      }
+
       // Try to load from Firestore if available
       try {
         final FirebaseFirestore firestore = FirebaseFirestore.instance;
