@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../screens/cart_screen.dart';
+import '../../screens/location_screen.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({super.key});
@@ -61,7 +62,7 @@ class HeaderWidget extends StatelessWidget {
         SizedBox(width: _spacing.w),
         _buildActionIcon(Icons.favorite_border, () {}),
         SizedBox(width: _spacing.w),
-        _buildActionIcon(Icons.location_on_outlined, () {}),
+        _buildActionIcon(Icons.location_on_outlined, () => _navigateToLocation(context)),
         SizedBox(width: _spacing.w),
         _buildCartIcon(context),
       ],
@@ -119,6 +120,15 @@ class HeaderWidget extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => const CartScreen(),
+      ),
+    );
+  }
+
+  void _navigateToLocation(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LocationScreen(),
       ),
     );
   }

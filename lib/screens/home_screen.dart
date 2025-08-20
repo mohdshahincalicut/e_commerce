@@ -155,12 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildDrawerItems(BuildContext context) {
     final drawerItems = [
-      {'icon': Icons.home, 'title': 'Home'},
-      {'icon': Icons.category, 'title': 'Categories'},
-      {'icon': Icons.favorite, 'title': 'Favorites'},
-      {'icon': Icons.shopping_cart, 'title': 'Cart'},
-      {'icon': Icons.local_offer, 'title': 'Offers'},
-      {'icon': Icons.settings, 'title': 'Settings'},
+      {'icon': Icons.home, 'title': 'Home', 'route': '/home'},
+      {'icon': Icons.category, 'title': 'Categories', 'route': null},
+      {'icon': Icons.favorite, 'title': 'Favorites', 'route': '/wishlist'},
+      {'icon': Icons.shopping_cart, 'title': 'Cart', 'route': '/cart'},
+      {'icon': Icons.local_offer, 'title': 'Offers', 'route': null},
+      {'icon': Icons.settings, 'title': 'Settings', 'route': null},
     ];
 
     return drawerItems.map((item) => _buildDrawerItem(
@@ -168,7 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
       title: item['title'] as String,
       onTap: () {
         Navigator.pop(context);
-        // Handle navigation for each item
+        final route = item['route'] as String?;
+        if (route != null) {
+          Navigator.pushNamed(context, route);
+        }
       },
     )).toList();
   }

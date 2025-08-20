@@ -11,6 +11,8 @@ import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/wishlist_screen.dart';
+import 'screens/cart_screen.dart';
 import 'utils/database_init.dart';
 
 void main() async {
@@ -34,6 +36,7 @@ void main() async {
   };
   
   _initializeDatabaseInBackground();
+  
   runApp(const MyApp());
 }
 
@@ -87,6 +90,8 @@ class MyApp extends StatelessWidget {
               '/signup': (context) => const SignUpScreen(),
               '/home': (context) => const HomeScreen(),
               '/profile': (context) => const ProfileScreen(),
+              '/wishlist': (context) => const WishlistScreen(),
+              '/cart': (context) => const CartScreen(),
             },
           );
         },

@@ -14,7 +14,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           if (cartProvider.items.isEmpty) {
@@ -26,18 +26,52 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: Row(
         children: [
-          Icon(Icons.shopping_cart, color: Colors.white),
-          SizedBox(width: 8.w),
-          Text('Shopping Cart'),
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Icon(
+              Icons.shopping_cart_rounded,
+              color: Colors.white,
+              size: 20.sp,
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Text(
+            'Shopping Cart',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       backgroundColor: Colors.deepPurple[800],
       foregroundColor: Colors.white,
-      elevation: 0,
+      elevation: 2,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      actions: [
+        Consumer<CartProvider>(
+          builder: (context, cartProvider, child) {
+            return IconButton(
+              icon: Icon(Icons.delete_outline_rounded, size: 22.sp, color: Colors.white),
+              onPressed: cartProvider.items.isNotEmpty 
+                  ? () => _showClearCartDialog(context, cartProvider)
+                  : null,
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -63,13 +97,21 @@ class CartScreen extends StatelessWidget {
       width: _emptyCartIconSize.w,
       height: _emptyCartIconSize.h,
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        gradient: LinearGradient(
+          colors: [Colors.deepPurple[50]!, Colors.deepPurple[100]!],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(_emptyCartIconSize.r / 2),
+        border: Border.all(
+          color: Colors.deepPurple[200]!,
+          width: 2,
+        ),
       ),
       child: Icon(
         Icons.shopping_cart_outlined,
         size: _emptyCartIconInnerSize.sp,
-        color: Colors.grey[400],
+        color: Colors.deepPurple[400],
       ),
     );
   }
@@ -98,22 +140,24 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildContinueShoppingButton(BuildContext context) {
-    return ElevatedButton(
+    return ElevatedButton.icon(
       onPressed: () => Navigator.pop(context),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple[800],
-        foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_buttonBorderRadius.r),
-        ),
-      ),
-      child: Text(
+      icon: Icon(Icons.shopping_bag_outlined, size: 18.sp),
+      label: Text(
         'Continue Shopping',
         style: TextStyle(
           fontSize: 16.sp,
           fontWeight: FontWeight.w600,
         ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.deepPurple[800],
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 14.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(_buttonBorderRadius.r),
+        ),
+        elevation: 2,
       ),
     );
   }
